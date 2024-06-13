@@ -1,5 +1,5 @@
 - name: Install Docker Engine on CentOS server without internet access
-  hosts: centos
+  hosts: ubuntu
   become: true
   vars:
     docker_version: "20.10.11"  # Replace with the desired Docker version
