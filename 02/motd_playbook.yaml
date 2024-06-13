@@ -1,46 +1,41 @@
-- name: Install Docker Engine on CentOS server without internet access
+# playbooks/install_docker.yml
+
+---
+- name: Download Docker Installation Files
   hosts: ubuntu
-  become: true
-  become_method: sudo
-  become_user: root
-  vars:
-    docker_version: "26.1.4"  # Replace with the desired Docker version
-    docker_packages:
-      - docker-{{ docker_version }}.tar.gz
-      # - docker-ce-cli-{{ docker_version }}.tar.gz
-      # - containerd.io-1.4.9-1.x86_64.rpm
-
   tasks:
-    - name: Download Docker packages from official repository
+    - name: Download Docker installation script
       get_url:
-        url: "https://download.docker.com/linux/static/stable/x86_64/{{ item }}"
-        dest: "/tmp/{{ item }}"
-      with_items: "{{ docker_packages }}"
-      delegate_to: localhost
+        url: https://get.docker.com/
+        dest: /tmp/get-docker.sh
+      register: download_result
 
-    - name: Copy Docker packages to remote server
-      copy:
-        src: "/tmp/{{ item }}"
-        dest: "/tmp/{{ item }}"
-      with_items: "{{ docker_packages }}"
+    - name: Check if download was successful
+      debug:
+        msg: "Download result: {{ download_result }}"
 
-    # - name: Install Docker packages from copied files
-    #   ansible.builtin.shell: |
-    #     cd /tmp
-    #     yum localinstall -y containerd.io-1.4.9-1.x86_64.rpm
-    #     tar xzf docker-ce-{{ docker_version }}.tar.gz
-    #     cp docker/* /usr/bin/
-    #   register: docker_install_output
+# - name: Copy Docker Installation Files to Other Machines
+#   hosts: all
+#   tasks:
+#     - name: Copy Docker installation script from downloader
+#       fetch:
+#         src: /tmp/get-docker.sh
+#         dest: /tmp/
+#         flat: yes
+#       delegate_to: downloader
 
-    # - name: Check Docker version
-    #   ansible.builtin.command: "docker --version"
-    #   register: docker_version_output
+#     - name: Ensure /tmp directory exists on target
+#       file:
+#         path: /tmp
+#         state: directory
 
-    # - name: Display Docker version
-    #   ansible.builtin.debug:
-    #     msg: "{{ docker_version_output.stdout }}"
+#     - name: Copy Docker installation script to targets
+#       copy:
+#         src: /tmp/get-docker.sh
+#         dest: /tmp/get-docker.sh
 
-    # - name: Start Docker service
-    #   ansible.builtin.service:
-    #     name: docker
-    #     state: started
+#     - name: Install Docker on target machines
+#       shell: sh /tmp/get-docker.sh
+#       become: yes
+#       args:
+#         creates: /usr/bin/docker
