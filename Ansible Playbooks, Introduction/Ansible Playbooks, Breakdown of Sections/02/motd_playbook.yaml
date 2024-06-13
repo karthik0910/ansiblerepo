@@ -1,0 +1,44 @@
+- name: Install Docker Engine on CentOS server without internet access
+  hosts: centos
+  become: true
+  vars:
+    docker_version: "20.10.11"  # Replace with the desired Docker version
+    docker_packages:
+      - docker-ce-{{ docker_version }}.tar.gz
+      - docker-ce-cli-{{ docker_version }}.tar.gz
+      - containerd.io-1.4.9-1.x86_64.rpm
+
+  tasks:
+    - name: Download Docker packages from official repository
+      get_url:
+        url: "https://download.docker.com/linux/static/stable/x86_64/{{ item }}"
+        dest: "/tmp/{{ item }}"
+      with_items: "{{ docker_packages }}"
+      delegate_to: localhost
+
+    - name: Copy Docker packages to remote server
+      copy:
+        src: "/tmp/{{ item }}"
+        dest: "/tmp/{{ item }}"
+      with_items: "{{ docker_packages }}"
+
+    # - name: Install Docker packages from copied files
+    #   ansible.builtin.shell: |
+    #     cd /tmp
+    #     yum localinstall -y containerd.io-1.4.9-1.x86_64.rpm
+    #     tar xzf docker-ce-{{ docker_version }}.tar.gz
+    #     cp docker/* /usr/bin/
+    #   register: docker_install_output
+
+    # - name: Check Docker version
+    #   ansible.builtin.command: "docker --version"
+    #   register: docker_version_output
+
+    # - name: Display Docker version
+    #   ansible.builtin.debug:
+    #     msg: "{{ docker_version_output.stdout }}"
+
+    # - name: Start Docker service
+    #   ansible.builtin.service:
+    #     name: docker
+    #     state: started
