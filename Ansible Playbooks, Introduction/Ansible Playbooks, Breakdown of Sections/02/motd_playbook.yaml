@@ -6,7 +6,7 @@
   vars:
     docker_version: "26.1.4"  # Replace with the desired Docker version
     docker_packages:
-      - docker-ce-{{ docker_version }}.tar.gz
+      - docker-{{ docker_version }}.tar.gz
       # - docker-ce-cli-{{ docker_version }}.tar.gz
       # - containerd.io-1.4.9-1.x86_64.rpm
 
