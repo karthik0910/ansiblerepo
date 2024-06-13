@@ -14,15 +14,15 @@
       debug:
         msg: "Download result: {{ download_result }}"
 
-# - name: Copy Docker Installation Files to Other Machines
-#   hosts: all
-#   tasks:
-#     - name: Copy Docker installation script from downloader
-#       fetch:
-#         src: /tmp/get-docker.sh
-#         dest: /tmp/
-#         flat: yes
-#       delegate_to: downloader
+- name: Copy Docker Installation Files to Other Machines
+  hosts: all
+  tasks:
+    - name: Copy Docker installation script from downloader
+      fetch:
+        src: /tmp/get-docker.sh
+        dest: /tmp/
+        flat: yes
+      delegate_to: downloader
 
 #     - name: Ensure /tmp directory exists on target
 #       file:
