@@ -4,11 +4,11 @@
   become_method: sudo
   become_user: root
   vars:
-    docker_version: "20.10.11"  # Replace with the desired Docker version
+    docker_version: "26.1.4"  # Replace with the desired Docker version
     docker_packages:
       - docker-ce-{{ docker_version }}.tar.gz
-      - docker-ce-cli-{{ docker_version }}.tar.gz
-      - containerd.io-1.4.9-1.x86_64.rpm
+      # - docker-ce-cli-{{ docker_version }}.tar.gz
+      # - containerd.io-1.4.9-1.x86_64.rpm
 
   tasks:
     - name: Download Docker packages from official repository
