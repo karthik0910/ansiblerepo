@@ -82,6 +82,6 @@
     - name: Add user to docker group
       become: yes
       user:
-        name: karthik
+        name: ansible
         groups: docker
         append: yes 
