@@ -66,7 +66,7 @@
     - name: Copy Docker packages to all hosts
       copy:
         src: /tmp/dockerimage/
-        dest: /tmp/dockerimag/
+        dest: /tmp/dockerimage/
       delegate_to: localhost
     - name: Debug contents of /tmp/dockerimages on remote hosts
       debug:
