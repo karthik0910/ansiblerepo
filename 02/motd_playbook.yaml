@@ -27,30 +27,32 @@
       apt:
         update_cache: yes
     - name: Create directory for Docker images
-      file:
-        path: /tmp/dockerimages
-        state: directory
-        mode: '0755'
+      local_action:
+        file:
+          path: /tmp/dockerimages
+          state: directory
+          mode: '0755'
     - name: Download Docker package files
-      get_url:
-        url: "https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/{{ item }}"
-        dest: /tmp/dockerimages
-      with_items:
-        - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
-        - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
-        - containerd.io_1.6.28-1_amd64.deb
-      ignore_errors: yes
+      local_action:
+        get_url:
+          url: "https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/{{ item }}"
+          dest: /tmp/dockerimages
+        with_items:
+          - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
+          - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
+          - containerd.io_1.6.28-1_amd64.deb
+        ignore_errors: yes
       
-    - name: Install Docker package files
-      apt:
-        deb: "/tmp/dockerimages/{{ item }}"
-      with_items:
-        - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
-        - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
-        - containerd.io_1.6.28-1_amd64.deb
+    # - name: Install Docker package files
+    #   apt:
+    #     deb: "/tmp/dockerimages/{{ item }}"
+    #   with_items:
+    #     - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
+    #     - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
+    #     - containerd.io_1.6.28-1_amd64.deb
 
-    - name: Ensure Docker is running
-      service:
-        name: docker
-        state: started
-        enabled: yes
+    # - name: Ensure Docker is running
+    #   service:
+    #     name: docker
+    #     state: started
+    #     enabled: yes
