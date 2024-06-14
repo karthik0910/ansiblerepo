@@ -58,11 +58,7 @@
         - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
         - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
         - containerd.io_1.6.28-1_amd64.deb
-      become: yes
-      become_user: root
-      become_method: sudo
-      vars:
-        ansible_become_pass: "{{ ansible_become_pass }}"
+
 
     - name: Ensure Docker is running
       service:
