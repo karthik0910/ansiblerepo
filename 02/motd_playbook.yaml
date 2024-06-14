@@ -2,7 +2,8 @@
 - name: Download Docker installation files
   hosts: localhost
   connection: local
-  gather_facts: no
+  gather_facts: false
+  become: yes
 
   tasks:
     - name: Install required packages for adding Docker repository
