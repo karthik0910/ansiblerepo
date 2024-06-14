@@ -55,28 +55,32 @@
   tasks:
     - name: Ensure directory exists for Docker images on all hosts
       file:
-        path: /tmp/dockerimag
+        path: /tmp/dockerimage
         state: directory
         mode: '0755'
-    - name: Debug contents of /tmp/dockerimag on localhost
+    - name: Debug contents of /tmp/dockerimage on localhost
       debug:
         msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
       run_once: true
 
-
-    - name: Copy Docker packages to all hosts
-      copy:
+    - name: Copy Docker packages from localhost to all hosts
+      synchronize:
         src: /tmp/dockerimage/
-        dest: /tmp/dockerimag/
-        remote_src: yes
+        dest: /tmp/dockerimage/
+      delegate_to: localhost
+    # - name: Copy Docker packages to all hosts
+    #   copy:
+    #     src: /tmp/dockerimage/
+    #     dest: /tmp/dockerimag/
+    #     remote_src: yes
     - name: Debug contents of /tmp/dockerimages on remote hosts
       debug:
-        msg: "{{ lookup('fileglob', '/tmp/dockerimag/*') }}"
+        msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
       delegate_to: localhost
 
     - name: Install Docker packages on all hosts
       apt:
-        deb: /tmp/dockerimag/{{ item }}
+        deb: /tmp/dockerimage/{{ item }}
       with_items:
         - docker-ce_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
         - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
