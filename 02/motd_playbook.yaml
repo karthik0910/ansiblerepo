@@ -46,7 +46,7 @@
       with_items:
         - docker-ce_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
         - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
-        - containerd.io_1.6.28-1_arm64.deb
+        - containerd.io_1.6.33-1_arm64.deb
       ignore_errors: yes
 - name: Install Docker packages
   hosts: ubuntu
@@ -84,7 +84,7 @@
       with_items:
         - docker-ce_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
         - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
-        - containerd.io_1.6.28-1_arm64.deb
+        - containerd.io_1.6.33-1_arm64.deb
       ignore_errors: yes
     - name: Set permissions on /var/run/docker.sock
       ansible.builtin.file:
