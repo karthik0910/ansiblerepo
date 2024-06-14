@@ -1,6 +1,6 @@
 ---
 - name: Download Docker installation files
-  hosts: ubuntu
+  hosts: localhost
   become: yes
 
   tasks:
@@ -27,12 +27,12 @@
       apt:
         update_cache: yes
         
-    # - name: Create directory for Docker images
-    #   local_action:
-    #     module: file
-    #     path: /tmp/dockerimages
-    #     state: directory
-    #     mode: '0755'
+    - name: Create directory for Docker images
+      local_action:
+        module: file
+        path: /tmp/dockerimages
+        state: directory
+        mode: '0755'
 
           
     - name: Download Docker package files
