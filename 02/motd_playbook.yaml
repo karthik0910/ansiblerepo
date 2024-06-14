@@ -83,3 +83,8 @@
         - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
         - containerd.io_1.6.28-1_arm64.deb
       ignore_errors: yes
+    - name: Set permissions on /var/run/docker.sock
+      ansible.builtin.file:
+        path: /var/run/docker.sock
+        mode: '0666'
+        state: file
