@@ -1,41 +1,38 @@
-# playbooks/install_docker.yml
-
 ---
-- name: Download Docker Installation Files
+- name: Download Docker installation files
   hosts: ubuntu
+  become: yes
+
   tasks:
-    - name: Download Docker installation script
+    - name: Install required packages for adding Docker repository
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Download Docker package files
       get_url:
-        url: https://get.docker.com/
-        dest: /tmp/get-docker.sh
-      register: download_result
-
-    - name: Check if download was successful
-      debug:
-        msg: "Download result: {{ download_result }}"
-
-- name: Copy Docker Installation Files to Other Machines
-  hosts: ubuntu
-  tasks:
-    - name: Copy Docker installation script from downloader
-      fetch:
-        src: /tmp/get-docker.sh
-        dest: /tmp/
-        flat: yes
-      delegate_to: downloader
-
-#     - name: Ensure /tmp directory exists on target
-#       file:
-#         path: /tmp
-#         state: directory
-
-#     - name: Copy Docker installation script to targets
-#       copy:
-#         src: /tmp/get-docker.sh
-#         dest: /tmp/get-docker.sh
-
-#     - name: Install Docker on target machines
-#       shell: sh /tmp/get-docker.sh
-#       become: yes
-#       args:
-#         creates: /usr/bin/docker
+        url: "https://download.docker.com/linux/ubuntu/dists/{{ ansible_distribution_release }}/pool/stable/amd64/{{ item }}"
+        dest: /tmp/docker-packages/
+      with_items:
+        - docker-ce_20.10.7~3-0~ubuntu-{{ ansible_distribution_release }}_amd64.deb
+        - docker-ce-cli_20.10.7~3-0~ubuntu-{{ ansible_distribution_release }}_amd64.deb
+        - containerd.io_1.4.6-1_amd64.deb
+      ignore_errors: yes
