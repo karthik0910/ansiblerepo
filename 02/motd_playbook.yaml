@@ -58,12 +58,21 @@
         path: /tmp/dockerimage
         state: directory
         mode: '0755'
+    - name: Debug contents of /tmp/dockerimages on localhost
+      debug:
+        msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
+      run_once: true
+
 
     - name: Copy Docker packages to all hosts
       copy:
         src: /tmp/dockerimage/
         dest: /tmp/dockerimage/
         remote_src: yes
+    - name: Debug contents of /tmp/dockerimages on remote hosts
+      debug:
+        msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
+      delegate_to: localhost
 
     - name: Install Docker packages on all hosts
       apt:
