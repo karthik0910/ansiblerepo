@@ -35,29 +35,29 @@
     - name: Create directory for Docker images
       local_action:
         module: file
-        path: /tmp/dockerimages
+        path: /tmp/dockerimage
         state: directory
         mode: '0755'
 
           
     - name: Download Docker package files
       get_url:
-        url: "https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/{{ item }}"
-        dest: /tmp/dockerimages
+        url: "https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/arm64/{{ item }}"
+        dest: /tmp/dockerimage
       with_items:
-        - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
-        - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
-        - containerd.io_1.6.28-1_amd64.deb
+        - docker-ce_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
+        - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
+        - containerd.io_1.6.28-1_arm64.deb
       ignore_errors: yes
 
       
     - name: Install Docker package files
       apt:
-        deb: "/tmp/dockerimages/{{ item }}"
+        deb: "/tmp/dockerimage/{{ item }}"
       with_items:
-        - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
-        - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
-        - containerd.io_1.6.28-1_amd64.deb
+        - docker-ce_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
+        - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
+        - containerd.io_1.6.28-1_arm64.deb
 
 
     - name: Ensure Docker is running
