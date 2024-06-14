@@ -39,7 +39,6 @@
         state: directory
         mode: '0755'
 
-          
     - name: Download Docker package files
       get_url:
         url: "https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/arm64/{{ item }}"
@@ -49,39 +48,27 @@
         - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
         - containerd.io_1.6.28-1_arm64.deb
       ignore_errors: yes
+- name: Install Docker packages
+  hosts: ubuntu
+  become: yes
 
-      
-    - name: Install Docker package files
+  tasks:
+    - name: Ensure directory exists for Docker images on all hosts
+      file:
+        path: /tmp/dockerimage
+        state: directory
+        mode: '0755'
+
+    - name: Copy Docker packages to all hosts
+      copy:
+        src: /tmp/dockerimage/
+        dest: /tmp/dockerimage/
+        remote_src: yes
+
+    - name: Install Docker packages on all hosts
       apt:
-        deb: "/tmp/dockerimage/{{ item }}"
+        deb: /tmp/dockerimage/{{ item }}
       with_items:
         - docker-ce_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
         - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
         - containerd.io_1.6.28-1_arm64.deb
-      ignore_errors: yes
-
-    - name: Ensure Docker is running
-      service:
-        name: docker
-        state: started
-        enabled: yes
-        
-    - name: Check if docker group exists
-      become: yes
-      command: getent group docker
-      register: docker_group_check
-      ignore_errors: true
-
-    - name: Create docker group if it doesn't exist
-      become: yes
-      group:
-        name: docker
-        state: present
-      when: docker_group_check.rc != 0  # Only create if the group doesn't exist
-
-    - name: Add user to docker group
-      become: yes
-      user:
-        name: ansible
-        groups: docker
-        append: yes 
