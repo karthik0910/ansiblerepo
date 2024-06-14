@@ -60,7 +60,7 @@
         mode: '0755'
     - name: Debug contents of /tmp/dockerimag on localhost
       debug:
-        msg: "{{ lookup('fileglob', '/tmp/dockerimag/*') }}"
+        msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
       run_once: true
 
 
