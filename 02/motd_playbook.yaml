@@ -45,9 +45,9 @@
       apt:
         deb: "/tmp/dockerimages/{{ item }}"
       with_items:
-        - docker-ce_20.10.7~3-0~ubuntu-{{ ansible_distribution_release }}_amd64.deb
-        - docker-ce-cli_20.10.7~3-0~ubuntu-{{ ansible_distribution_release }}_amd64.deb
-        - containerd.io_1.4.6-1_amd64.deb
+        - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
+        - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
+        - containerd.io_1.6.28-1_amd64.deb
 
     - name: Ensure Docker is running
       service:
