@@ -65,3 +65,23 @@
         name: docker
         state: started
         enabled: yes
+        
+    - name: Check if docker group exists
+      become: yes
+      command: getent group docker
+      register: docker_group_check
+      ignore_errors: true
+
+    - name: Create docker group if it doesn't exist
+      become: yes
+      group:
+        name: docker
+        state: present
+      when: docker_group_check.rc != 0  # Only create if the group doesn't exist
+
+    - name: Add user to docker group
+      become: yes
+      user:
+        name: karthik
+        groups: docker
+        append: yes 
