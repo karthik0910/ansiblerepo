@@ -74,7 +74,10 @@
       debug:
         msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
       delegate_to: localhost
-
+    - name: Uninstall containerd.io
+      apt:
+        name: containerd.io
+        state: absent
     - name: Install Docker packages on all hosts
       apt:
         deb: /tmp/dockerimage/{{ item }}
