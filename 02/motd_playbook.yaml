@@ -63,16 +63,11 @@
         msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
       run_once: true
 
-    - name: Copy Docker packages from localhost to all hosts
-      synchronize:
+    - name: Copy Docker packages to all hosts
+      copy:
         src: /tmp/dockerimage/
-        dest: /tmp/dockerimage/
+        dest: /tmp/dockerimag/
       delegate_to: localhost
-    # - name: Copy Docker packages to all hosts
-    #   copy:
-    #     src: /tmp/dockerimage/
-    #     dest: /tmp/dockerimag/
-    #     remote_src: yes
     - name: Debug contents of /tmp/dockerimages on remote hosts
       debug:
         msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
