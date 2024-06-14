@@ -68,6 +68,17 @@
         src: /tmp/dockerimage/
         dest: /tmp/dockerimage/
       delegate_to: localhost
+    - name: Set permissions on copied files
+      tasks:
+        - name: Set permissions on copied Docker packages
+          file:
+            path: /tmp/dockerimage/{{ item }}
+            mode: '0644'
+          with_items:
+            - docker-ce_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
+            - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_arm64.deb
+            - containerd.io_1.6.28-1_arm64.deb
+
     - name: Debug contents of /tmp/dockerimages on remote hosts
       debug:
         msg: "{{ lookup('fileglob', '/tmp/dockerimage/*') }}"
