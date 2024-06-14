@@ -30,7 +30,7 @@
     - name: Download Docker package files
       get_url:
         url: "https://download.docker.com/linux/ubuntu/dists/jammy/pool/stable/amd64/{{ item }}"
-        dest: /tmp/docker-packages/
+        dest: /
       with_items:
         - docker-ce_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
         - docker-ce-cli_26.1.4-1~ubuntu.22.04~jammy_amd64.deb
